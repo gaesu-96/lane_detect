@@ -1,8 +1,3 @@
-
-Your description is generally clear, but there are a few grammatical adjustments that could enhance readability and flow. Here’s a revised version:
-
-Project Overview
-
 This project is built on ROS2 and Gazebo and is divided into two categories. One category utilizes a computer vision algorithm instead of deep learning.
 
 It detects lanes using the Hough Transform and controls the vehicle using a PID controller.
