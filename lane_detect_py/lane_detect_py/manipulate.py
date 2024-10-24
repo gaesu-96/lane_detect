@@ -24,14 +24,7 @@ class Manipulate(Node):
             10
         )
 
-        self.curve_signal = self.create_subscription(
-            Bool,
-            '/curve_signal',
-            self.curve_callback,
-            10
-        )
-
-        self.Kp = 0.05
+        self.Kp = 0.01
         self.Ki = 0.0
         self.Kd = 0.0
 
@@ -63,23 +56,40 @@ class Manipulate(Node):
 
     def center_callback(self, msg):
         rad = msg.data
-        signal = self.PID_Controll(rad)
+        
 
         twist_msg = Twist()
-        twist_msg.linear.x = 0.5
-        twist_msg.angular.z = signal
+        twist_msg.linear.x = 1.
 
-        if self.signal:
-            twist_msg.linear.x = 1.
+        if 2.7 <= abs(rad) < 2.8:
+            twist_msg.linear.x = 0.8
             self.Kp = 0.01
-            self.Ki = 0.03
-            self.get_logger().info('curving!')
+            self.Ki = 0.
+            self.get_logger().info(f'curving! : {rad}')
+        elif 2.5 <= abs(rad) < 2.7:
+            self.Kp = 0.025
+            twist_msg.linear.x = 0.6
+            self.get_logger().info(f'curving! : {rad}')
+        elif 2.3 <= abs(rad) < 2.5:
+            self.Kp = 0.05
+            twist_msg.linear.x = 0.5
+            self.get_logger().info(f'curving! : {rad}')
+        elif abs(rad) < 2.3:
+            self.Kp = 0.1
+            twist_msg.linear.x = 0.4
+            self.get_logger().info(f'power curving! : {rad}')
+        elif abs(rad) == 5.:
+            self.Kp = 0.1
+            twist_msg.linear.x = 0.2
+            self.get_logger().info(f'danger! : {rad}')
         else:
             if (self.get_clock().now() - self.start_time).nanoseconds / 1e9 > 20:
-                twist_msg.linear.x = 2.
+                twist_msg.linear.x = 1.
                 self.Kp = 0.005
                 self.get_logger().info('not curving')
 
+        signal = self.PID_Controll(rad)
+        twist_msg.angular.z = signal
         self.rad_publisher.publish(twist_msg)
 
     def signal_handler(self, sig, frame):

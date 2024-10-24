@@ -22,7 +22,6 @@ from .config import config
 #                                                           That we will create for integrating Sat_Nav
 #                                                           ability to the SDC
 
-
 from collections import deque
 class Debugging:
 

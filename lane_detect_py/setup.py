@@ -22,6 +22,7 @@ setup(
         'console_scripts': [
             'lane_detect = lane_detect_py.lane_detect:main',
             'manipulate = lane_detect_py.manipulate:main',
+            'lane_detect_dl = lane_detect_py.lane_detect_dl:main',
         ],
     },
 )
